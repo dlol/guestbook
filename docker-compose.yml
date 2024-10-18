@@ -1,0 +1,11 @@
+services:
+  guestbook:
+    image: guestbook:latest
+    container_name: guestbook
+    restart: unless-stopped
+    volumes:
+      - ./db:/guestbook/db
+      - ./config:/guestbook/config
+      - ./static:/guestbook/src/static
+    ports:
+      - 5678:5678

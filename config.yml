@@ -1,0 +1,13 @@
+siteTitle: guestbook
+faviconApi: "https://4get.ca/favicon?s=" # leave empty for not favicons
+permalink: https://konakona.moe
+root: /guestbook-iframe/
+cloudflare: false
+showStatus: true
+maxCommentLen: 256
+maxNameLen: 16
+maxSiteLen: 24
+hoursPerPost: 2
+postsPerPage: 30
+whitelistedIPs: ['192.168.128.1']
+port: 5678

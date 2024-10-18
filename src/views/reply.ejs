@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <% if (!http_error) { %>
+            <title>Redirecting...</title>
+            <meta http-equiv="refresh" content="5; url=<%= root %>">
+        <% } else { %>
+            <title><%= title %></title>
+        <% } %>
+        
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="<%= root %>styles.css">
+        <link rel="icon" type="image/x-icon" href="<%= root %>favicon.ico">
+    </head>
+    <body class="status">
+        <h1><%= title %></h1>
+        <hr>
+        <% if (!http_error) { %>
+            <p><%= response %> Redirecting you in 5 seconds... or <a href="<%= root %>">click here</a>.</p>
+        <% } else { %>
+            <p><i><%- desc %></i></p>
+        <% } %>
+    </body>
+</html>

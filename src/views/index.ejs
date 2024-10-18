@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title><%= title %></title>
+        <meta charset="UTF-8">
+        <script src="js/main.js"></script>
+        <script src="js/resizer.js"></script>
+        <link rel="icon" type="image/x-icon" href="favicon.ico">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <a href="rss">
+            <img id="rss-button" src="rss.svg" alt="RSS">
+        </a>
+
+        <form class="guest-form" action="submit" method="post">
+            <input pattern="<%= regexName.toString().replace(/^\/|\/$/g, '') %>" id="guest-name" type="text" name="name" maxlength="<%= maxNameLen %>" placeholder="Name (optional)"><br>
+            <input pattern="<%= regexUrl.toString().replace(/^\/|\/$/g, '') %>" id="guest-website" type="text" name="website" maxlength="<%= maxSiteLen %>" placeholder="Your website (optional)"><br>
+            <textarea id="guest-comment" name="comment" cols="40" rows="8" maxlength="<%= maxCommentLen %>" placeholder="Comment (max. <%= maxCommentLen %> characters)"></textarea><br>
+            <button class="submit-button" type="submit">Submit</button>
+            <input type="button" class="clear-button" onclick="clearInputs()" value="Clear">
+            <a class="toggle-reverse" onclick="toggleReverse()">Toggle Reverse</a>
+        </form>
+        
+        <%
+            const isoCountries = {
+                'af': 'Afghanistan',
+                'ax': 'Aland Islands',
+                'al': 'Albania',
+                'dz': 'Algeria',
+                'as': 'American Samoa',
+                'ad': 'Andorra',
+                'ao': 'Angola',
+                'ai': 'Anguilla',
+                'aq': 'Antarctica',
+                'ag': 'Antigua and Barbuda',
+                'ar': 'Argentina',
+                'am': 'Armenia',
+                'aw': 'Aruba',
+                'au': 'Australia',
+                'at': 'Austria',
+                'az': 'Azerbaijan',
+                'bs': 'Bahamas',
+                'bh': 'Bahrain',
+                'bd': 'Bangladesh',
+                'bb': 'Barbados',
+                'by': 'Belarus',
+                'be': 'Belgium',
+                'bz': 'Belize',
+                'bj': 'Benin',
+                'bm': 'Bermuda',
+                'bt': 'Bhutan',
+                'bo': 'Bolivia',
+                'ba': 'Bosnia and Herzegovina',
+                'bw': 'Botswana',
+                'bv': 'Bouvet Island',
+                'br': 'Brazil',
+                'io': 'British Indian Ocean Territory',
+                'bn': 'Brunei Darussalam',
+                'bg': 'Bulgaria',
+                'bf': 'Burkina Faso',
+                'bi': 'Burundi',
+                'kh': 'Cambodia',
+                'cm': 'Cameroon',
+                'ca': 'Canada',
+                'cv': 'Cape Verde',
+                'ky': 'Cayman Islands',
+                'cf': 'Central African Republic',
+                'td': 'Chad',
+                'cl': 'Chile',
+                'cn': 'China',
+                'cx': 'Christmas Island',
+                'cc': 'Cocos (Keeling) Islands',
+                'co': 'Colombia',
+                'km': 'Comoros',
+                'cg': 'Congo',
+                'cd': 'Congo, Democratic Republic',
+                'ck': 'Cook Islands',
+                'cr': 'Costa Rica',
+                'ci': 'Cote D\'Ivoire',
+                'hr': 'Croatia',
+                'cu': 'Cuba',
+                'cy': 'Cyprus',
+                'cz': 'Czech Republic',
+                'dk': 'Denmark',
+                'dj': 'Djibouti',
+                'dm': 'Dominica',
+                'do': 'Dominican Republic',
+                'ec': 'Ecuador',
+                'eg': 'Egypt',
+                'sv': 'El Salvador',
+                'gq': 'Equatorial Guinea',
+                'er': 'Eritrea',
+                'ee': 'Estonia',
+                'et': 'Ethiopia',
+                'fk': 'Falkland Islands (Malvinas)',
+                'fo': 'Faroe Islands',
+                'fj': 'Fiji',
+                'fi': 'Finland',
+                'fr': 'France',
+                'gf': 'French Guiana',
+                'pf': 'French Polynesia',
+                'tf': 'French Southern Territories',
+                'ga': 'Gabon',
+                'gm': 'Gambia',
+                'ge': 'Georgia',
+                'de': 'Germany',
+                'gh': 'Ghana',
+                'gi': 'Gibraltar',
+                'gr': 'Greece',
+                'gl': 'Greenland',
+                'gd': 'Grenada',
+                'gp': 'Guadeloupe',
+                'gu': 'Guam',
+                'gt': 'Guatemala',
+                'gg': 'Guernsey',
+                'gn': 'Guinea',
+                'gw': 'Guinea-Bissau',
+                'gy': 'Guyana',
+                'ht': 'Haiti',
+                'hm': 'Heard Island & Mcdonald Islands',
+                'va': 'Holy See (Vatican City State)',
+                'hn': 'Honduras',
+                'hk': 'Hong Kong',
+                'hu': 'Hungary',
+                'is': 'Iceland',
+                'in': 'India',
+                'id': 'Indonesia',
+                'ir': 'Iran, Islamic Republic Of',
+                'iq': 'Iraq',
+                'ie': 'Ireland',
+                'im': 'Isle Of Man',
+                'il': 'Israel',
+                'it': 'Italy',
+                'jm': 'Jamaica',
+                'jp': 'Japan',
+                'je': 'Jersey',
+                'jo': 'Jordan',
+                'kz': 'Kazakhstan',
+                'ke': 'Kenya',
+                'ki': 'Kiribati',
+                'kr': 'Korea',
+                'kw': 'Kuwait',
+                'kg': 'Kyrgyzstan',
+                'la': 'Lao People\'s Democratic Republic',
+                'lv': 'Latvia',
+                'lb': 'Lebanon',
+                'ls': 'Lesotho',
+                'lr': 'Liberia',
+                'ly': 'Libyan Arab Jamahiriya',
+                'li': 'Liechtenstein',
+                'lt': 'Lithuania',
+                'lu': 'Luxembourg',
+                'mo': 'Macao',
+                'mk': 'Macedonia',
+                'mg': 'Madagascar',
+                'mw': 'Malawi',
+                'my': 'Malaysia',
+                'mv': 'Maldives',
+                'ml': 'Mali',
+                'mt': 'Malta',
+                'mh': 'Marshall Islands',
+                'mq': 'Martinique',
+                'mr': 'Mauritania',
+                'mu': 'Mauritius',
+                'yt': 'Mayotte',
+                'mx': 'Mexico',
+                'fm': 'Micronesia, Federated States Of',
+                'md': 'Moldova',
+                'mc': 'Monaco',
+                'mn': 'Mongolia',
+                'me': 'Montenegro',
+                'ms': 'Montserrat',
+                'ma': 'Morocco',
+                'mz': 'Mozambique',
+                'mm': 'Myanmar',
+                'na': 'Namibia',
+                'nr': 'Nauru',
+                'np': 'Nepal',
+                'nl': 'Netherlands',
+                'an': 'Netherlands Antilles',
+                'nc': 'New Caledonia',
+                'nz': 'New Zealand',
+                'ni': 'Nicaragua',
+                'ne': 'Niger',
+                'ng': 'Nigeria',
+                'nu': 'Niue',
+                'nf': 'Norfolk Island',
+                'mp': 'Northern Mariana Islands',
+                'no': 'Norway',
+                'om': 'Oman',
+                'pk': 'Pakistan',
+                'pw': 'Palau',
+                'ps': 'Palestinian Territory, Occupied',
+                'pa': 'Panama',
+                'pg': 'Papua New Guinea',
+                'py': 'Paraguay',
+                'pe': 'Peru',
+                'ph': 'Philippines',
+                'pn': 'Pitcairn',
+                'pl': 'Poland',
+                'pt': 'Portugal',
+                'pr': 'Puerto Rico',
+                'qa': 'Qatar',
+                're': 'Reunion',
+                'ro': 'Romania',
+                'ru': 'Russian Federation',
+                'rw': 'Rwanda',
+                'bl': 'Saint Barthelemy',
+                'sh': 'Saint Helena',
+                'kn': 'Saint Kitts and Nevis',
+                'lc': 'Saint Lucia',
+                'mf': 'Saint Martin',
+                'pm': 'Saint Pierre and Miquelon',
+                'vc': 'Saint Vincent and Grenadines',
+                'ws': 'Samoa',
+                'sm': 'San Marino',
+                'st': 'Sao Tome and Principe',
+                'sa': 'Saudi Arabia',
+                'sn': 'Senegal',
+                'rs': 'Serbia',
+                'sc': 'Seychelles',
+                'sl': 'Sierra Leone',
+                'sg': 'Singapore',
+                'sk': 'Slovakia',
+                'si': 'Slovenia',
+                'sb': 'Solomon Islands',
+                'so': 'Somalia',
+                'za': 'South Africa',
+                'gs': 'South Georgia and Sandwich Isl.',
+                'es': 'Spain',
+                'lk': 'Sri Lanka',
+                'sd': 'Sudan',
+                'sr': 'Suriname',
+                'sj': 'Svalbard and Jan Mayen',
+                'sz': 'Swaziland',
+                'se': 'Sweden',
+                'ch': 'Switzerland',
+                'sy': 'Syrian Arab Republic',
+                'tw': 'Taiwan',
+                'tj': 'Tajikistan',
+                'tz': 'Tanzania',
+                'th': 'Thailand',
+                'tl': 'Timor-Leste',
+                'tg': 'Togo',
+                'tk': 'Tokelau',
+                'to': 'Tonga',
+                'tt': 'Trinidad and Tobago',
+                'tn': 'Tunisia',
+                'tr': 'Turkey',
+                'tm': 'Turkmenistan',
+                'tc': 'Turks and Caicos Islands',
+                'tv': 'Tuvalu',
+                'ug': 'Uganda',
+                'ua': 'Ukraine',
+                'ae': 'United Arab Emirates',
+                'gb': 'United Kingdom',
+                'us': 'United States',
+                'um': 'United States Outlying Islands',
+                'uy': 'Uruguay',
+                'uz': 'Uzbekistan',
+                'vu': 'Vanuatu',
+                've': 'Venezuela',
+                'vn': 'Viet Nam',
+                'vg': 'Virgin Islands, British',
+                'vi': 'Virgin Islands, United States',
+                'wf': 'Wallis and Futuna',
+                'eh': 'Western Sahara',
+                'ye': 'Yemen',
+                'zm': 'Zambia',
+                'zw': 'Zimbabwe',
+                'unknown': 'Unknown'
+            }
+        %>
+
+        <% if (showStatus) { %>
+            <div class="guestbook-status">
+                <h2>Status</h2>
+                <hr>
+                <b>Unique sites:</b> <%= websiteList.length %><br>
+                <% websiteList.forEach((website) => { let host = website.match(/^(?:https?:\/\/)?(?:[^@\n]+@)?([^:\/\n]+)/im)[1]%> 
+                    <span style="white-space: nowrap;">
+                        <% if (faviconApi !== "") { %><img loading="lazy" alt="?" style="vertical-align: middle;" src="<%= faviconApi %><%= host %>"><% } %><a target="_blank" href="//<%= website.replace(/\/$/, "") %>"><%= website.replace(/\/$/, '') %></a> 
+                    </span>
+                <% }) %><% if (websiteList.length > 0) { %><br><% } %>
+                
+                <b>Unique names:</b> <%= nameList.length %><br>
+                <% nameList.forEach((name) => { %>
+                    <%= name %>
+                <% }) %><% if (nameList.length > 0) { %><br><% } %>
+                
+                <b>Unique IPs:</b> <%= nbUniqIp %><br>
+
+                <% 
+                    let countryCount = {}
+                    for (let i = 0; i < countries.length; i++) {
+                        let country = countries[i]
+                    if (countryCount[country]) {
+                            countryCount[country]++
+                        } else {
+                            countryCount[country] = 1
+                        }
+                    }
+                %>
+
+                <% let uniqCountries = Object.keys(countryCount).length %>
+
+                <b>Unique Countries:</b> <%= uniqCountries %><br>
+                
+                <%
+                    let countryEntries = Object.entries(countryCount)
+                    countryEntries.sort((a, b) => {
+                        return parseInt(b[1]) - parseInt(a[1])
+                    })
+                %>
+                <div class="icon-text">
+                    <% for (let [key, value] of countryEntries) { let country = key === 'null' ? 'unknown' : key %>
+                        <span class="flag <%= country %>" title="<%= isoCountries[country] %>"></span><%= value %>
+                    <% } %><% if (uniqCountries > 0) { %><br><% } %>
+                </div>
+
+                <b>Number of Posts:</b> <%= totalPosts %>
+            </div>
+        <% } %>
+
+        <hr>
+
+        <% if (guestbook.length === 0) { %><h2 class="guestbook-empty">There are no posts...</h2><% } %>  
+        <% guestbook.forEach((guest) => { %>
+            <%# extracting the host from the url with regex https://www.javatpoint.com/how-to-get-domain-name-from-url-in-javascript %>
+            <div class="comment-box" id="comment-id-<%= guest.id %>">
+                <span class="comment-head">
+                    <% let country = guest.country === null ? 'unknown' : guest.country %>
+
+                    <div class="icon-text">
+                        <b class="comment-name"><% if (guest.name === null) { %>Anonymous<% } else { %><%= guest.name %><% } %></b> <span class="flag <%= country %>" title="<%= isoCountries[country] %>"></span>
+                        <% if (guest.website !== null) { let host = (guest.website).match(/^(?:https?:\/\/)?(?:[^@\n]+@)?([^:\/\n]+)/im)[1] %> 
+                            at <b><% if (faviconApi !== "") { %><img loading="lazy" alt="?" style="vertical-align: middle;" src="<%= faviconApi %><%= host %>"><% } %><a target="_blank" class="comment-website" target="_blank" href="//<%= guest.website.replace(/\/$/, '') %>"><%= (guest.website).replace(/\/$/, '') %></a></b>
+                        <% } %>
+                        
+                        <%
+                            let date = new Date(guest.date)
+                            let displayDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
+                        %>
+
+                        on <b class="comment-date"><%= displayDate %></b>
+                        No.<a class="comment-id" href="javascript:quote(<%= guest.id %>)"><%= guest.id %></a><br>
+                    </div>
+                </span>
+                <%
+                    function yotcuckParser(comment) {
+                        let lines = comment.split('\n')
+                        let output = ''
+
+                        for (let i = 0; i < lines.length; i++) {
+                            let line = lines[i]
+
+                            line = line.replace(/&gt;&gt;\d+/g, (match) => `<a class="comment-quote" href="${match.replace('&gt;&gt;', '#comment-id-')}">${match}</a>`)
+
+                            if (line.startsWith('&gt;') && line.substring(4, 8) !== '&gt;') {
+                                line = `<span class="comment-greentext">${line}</span>`
+                            }
+
+                            // do not add <br> tag if its the last iteration of the for loop
+                            // output += line + '<br>'
+                            output += line + (i !== lines.length - 1 ? '<br>' : '')
+                        }
+                        // Removes leading/trailing <br>'s and allows 3 consecutive non trailing or leading <br>'s
+                        output = output.replace(/^(<br>\s*)+|(<br>\s*){4,}|(<br>\s*)+$/g, '')
+
+                        return output
+                    }
+                %>
+                <span class="comment">
+                    <%- yotcuckParser(guest.comment) %>
+                </span>
+            </div>
+        <% }) %>
+
+        <hr>
+
+        <div class="paginator">
+            <b class="paginator-label">Page:</b><br>
+            <% if (pageNumber > 1) { %> <a class="next-prev" href="?page=1<% if (way === 'ASC') { %>&reverse=true<% } %>">First</a><% } %>
+            <% if (pageNumber > 1) { %> <a class="next-prev" href="?page=<%= pageNumber - 1 %><% if (way === 'ASC') { %>&reverse=true<% } %>">Prev</a> <% } %>
+
+            <% for (let i = iterator; i <= endingLink; i++) { %>
+                <% if (i === pageNumber) { %>
+                    <a class="selectedPage" href="?page=<%= i !== 0 ? i : 1 %><% if (way === 'ASC') { %>&reverse=true<% } %>">[<%= i !== 0 ? i : 1 %>]</a>
+                    <% continue %>
+                <% } else if (i >= 1) { %>
+                    <a class="page" href="?page=<%= i %><% if (way === 'ASC') { %>&reverse=true<% } %>"><%= i %></a>
+                    <% continue %> 
+            <% }} %> 
+
+            <% if (pageNumber < numOfPages) { %> <a class="next-prev" href="?page=<%= pageNumber + 1 %><% if (way === 'ASC') { %>&reverse=true<% } %>">Next</a><% } %>
+            <% if (pageNumber < numOfPages) { %> <a class="next-prev" href="?page=<%= numOfPages %><% if (way === 'ASC') { %>&reverse=true<% } %>">Last</a><% } %>
+        </div>
+        <br>
+        <img alt="valid-html" src="88x31/valid-html5.gif"><img alt="valid-css" src="88x31/vcss-blue.gif"><img alt="valid-rss" src="88x31/valid-rss-rogers.png">
+    </body>
+</html>
