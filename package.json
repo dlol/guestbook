@@ -1,6 +1,6 @@
 {
     "name": "guestbook",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "A simple \"guestbook\" for my website with javascript",
     "main": "src/index.js",
     "author": "dw <dw@konakona.moe>",
@@ -14,5 +14,9 @@
         "ping": "^0.4.4",
         "sanitize-html": "^2.11.0",
         "sqlite3": "^5.1.6"
+    },
+    "scripts": {
+        "test": "node --watch src/index.js",
+        "start": "node src/index.js"
     }
 }

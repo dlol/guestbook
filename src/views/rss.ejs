@@ -8,17 +8,17 @@
         <language>en</language>
         <atom:link href="<%= permalink %><%= root %>rss" rel="self" type="application/rss+xml"/>
         <% guestbook.slice().reverse().forEach((guest) => { %>
-        <item>
-            <title>Comment ID: <%= guest.id %></title>
-            <link><%= permalink %><%= root %>#comment-id-<%= guest.id %></link>
-            <pubDate><%= guest.date %></pubDate>
-            <guid><%= permalink %><%= root %>#comment-id-<%= guest.id %></guid>
-            <description> <%# Please tell me there is a better way to do this %>
-                <% let name = guest.name === null ? 'Anonymous' : guest.name %><% let country = guest.country === null ? 'unknown' : guest.country %>&lt;b&gt;<%= name %>&lt;/b&gt; &lt;<%= country %><% if (guest.website !== null) { let host = (guest.website).match(/^(?:https?:\/\/)?(?:[^@\n]+@)?([^:\/\n]+)/im)[1] %> at &lt;b&gt;<% if (faviconApi !== "") { %>&lt;img alt="?" style="vertical-align: middle;" src="<%= faviconApi %><%= host %>"&gt;<% } %>&lt;a target="_blank" class="comment-website" target="_blank" href="//<%= guest.website.replace(/\/$/, '') %>"&gt;<%= (guest.website).replace(/\/$/, '') %>&lt;/a&gt;&lt;/b&gt;<% } %>
-                &lt;br&gt;&lt;br&gt;
-                <%= guest.comment %>
-            </description>
-        </item>
+            <item>
+                <title>Comment ID: <%= guest.id %></title>
+                <link><%= permalink %><%= root %>#comment-id-<%= guest.id %></link>
+                <pubDate><%= guest.date %></pubDate>
+                <guid><%= permalink %><%= root %>#comment-id-<%= guest.id %></guid>
+                <description> <%# Please tell me there is a better way to do this %>
+                    <% let name = guest.name === null ? 'Anonymous' : guest.name %><% let country = guest.country === null ? 'unknown' : guest.country %>&lt;b&gt;<%= name %>&lt;/b&gt; &lt;<%= country %><% if (guest.website !== null) { let host = (guest.website).match(/^(?:https?:\/\/)?(?:[^@\n]+@)?([^:\/\n]+)/im)[1] %> at &lt;b&gt;<% if (faviconApi !== "") { %>&lt;img alt="?" style="vertical-align: middle;" src="<%= faviconApi %><%= host %>"&gt;<% } %>&lt;a target="_blank" class="comment-website" target="_blank" href="//<%= guest.website.replace(/\/$/, '') %>"&gt;<%= (guest.website).replace(/\/$/, '') %>&lt;/a&gt;&lt;/b&gt;<% } %>
+                    &lt;br&gt;&lt;br&gt;
+                    <%= guest.comment %>
+                </description>
+            </item>
         <% }) %>
     </channel>
 </rss>

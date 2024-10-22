@@ -174,8 +174,7 @@ app.post(`${root}submit`, async (req, res) => {
                     }
                 })
             }),
-            // Only tests if host !== null
-            host !== null
+            host !== null // Only tests if host !== null
             ? new Promise((resolve) => {
                 ping.sys.probe(host, function (isAlive) {
                     resolve(isAlive)

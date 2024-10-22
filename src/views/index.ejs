@@ -9,10 +9,6 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <a href="rss">
-            <img id="rss-button" src="rss.svg" alt="RSS">
-        </a>
-
         <form class="guest-form" action="submit" method="post">
             <input pattern="<%= regexName.toString().replace(/^\/|\/$/g, '') %>" id="guest-name" type="text" name="name" maxlength="<%= maxNameLen %>" placeholder="Name (optional)"><br>
             <input pattern="<%= regexUrl.toString().replace(/^\/|\/$/g, '') %>" id="guest-website" type="text" name="website" maxlength="<%= maxSiteLen %>" placeholder="Your website (optional)"><br>

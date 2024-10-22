@@ -207,14 +207,6 @@ p.footer-msg > a {
     color: var(--anchor-color-alt);
 }
 
-#rss-button {
-    height: 45px;
-    width: 45px;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-}
-
 .flag {
     display: inline-block;
     width: 16px;
